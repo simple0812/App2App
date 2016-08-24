@@ -1,0 +1,15 @@
+﻿<Page
+    x:Class="AppClient.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AppClient"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBox Header="first number" x:Name="txtNum1"></TextBox>
+        <TextBox Header="second number" x:Name="txtNum2"></TextBox>
+        <Button Content="calc" Click="Button_Click"></Button>
+    </StackPanel>
+</Page>

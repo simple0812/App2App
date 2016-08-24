@@ -1,0 +1,26 @@
+1.<uap:Extension Category="windows.appService" EntryPoint="入口点">  
+    <uap:AppService Name="服务名称" />
+</uap:Extension> 
+2.在当前 UWP 解决方案中添加一个 Windows 运行时组件(Windows Universal) 项目。注意，项目类型务必是 Windows 运行时组件 （也就是 Windows Runtime Component）而不是类库.
+3.获取服务提供应用包名
+MSDN 文档上列举了两种获取 PFN 包名的方法：
+
+从服务提供应用项目内（例如，从 App.xaml.cs 中的 public App()）调用Windows.ApplicationModel.Package.Current.Id.FamilyName，可以通过输出到 Visual Studio 的输出窗口进行观察记录，或展示在应用界面上等。
+
+部署解决方案（生成>部署解决方案）并记下输出窗口中的完整程序包名称（查看>输出）。 注意部署时输出的是完整包名，必须从输出窗口中的字符串中去除平台信息，以获取 PFN 包名。 例如，如果输出窗口中呈现的完整程序包名称为 9fe3058b-3de0-4e05-bea7-84a06f0ee4f0_1.0.0.0_x86__yd7nk54bq29ra，需去除其中的 1.0.0.0_x86__，留下 9fe3058b-3de0-4e05-bea7-84a06f0ee4f0_yd7nk54bq29ra 作为所需的 PFN 包名。
+
+还有一种简单的推荐方法：
+
+在解决方案浏览器中双击 Package.appxmanifest 文件打开清单文件设计器，切换到 Packaging 选项卡，查看 Package family name 一栏中的值
+
+
+4要调试客户端应用很简单，只需像一般调试 UWP 应用一样直接在 Visual Studio 中启动调试即可。或从开始菜单启动客户端应用，再通过 Visual Studio 附加调试器到启动的客户端进程。（注意进程列表中可能会出现两个窗口标题为客户端应用名称的进程，需选择应用自身的进程，而非 ApplicationFrameHost.exe，该进程是 UWP 应用的视图框架宿主进程。）
+
+应用服务的调试要稍微麻烦一些，步骤如下：
+
+1.确保整个解决方案都已经生成并部署（即服务提供应用和客户端调用者应用都已生成部署）。
+2.打开服务提供应用项目（注意，是应用的项目，不是后台任务的项目）的项目属性设置，切换到调试(Debug)选项卡，在 启动动作(Start action) 中勾选 不启动应用，但在应用启动时开始调试(Do not launch, but debug my code when it starts)。
+3.右键单击服务提供应用项目（注意，是应用的项目，不是后台任务的项目），选择设置为启动项目(Set as StartUp Project)。
+4.在后台进程的服务代码中设端点。
+5.在当前 Visual Studio 窗口中按下 F5 启动调试，此时应用应该不会启动，调试也不会立即启动，而是等待来自外部对服务的请求激活后台任务后才开始调试。
+6.从开始菜单启动客户端调用者应用，点击按钮触发对服务的调用，此时 Visual Studio 会开始进行调试，并停在第 4 步中设置的断点处。
